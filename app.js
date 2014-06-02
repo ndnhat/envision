@@ -1,3 +1,4 @@
+var newrelic = require('newrelic');
 var stack = require('simple-stack-common');
 var gm = require('gm');
 
@@ -27,7 +28,40 @@ app.useBefore('router', function locals(req, res, next) {
   next();
 });
 
-app.get('/validate/:prop', function(req, res) {
+app.get('/', function(req, res) {
+  var data = {
+    validate: {
+      method: 'GET',
+      action: res.locals.url + '/validate',
+      input: {
+        image: {
+          required: true,
+          label: 'Image'
+        },
+        props: {
+          required: true,
+          label: 'Properties'
+        }
+      }
+    }
+  };
+  data.validate.input['min-width'] = {
+    label: 'min-width'
+  };
+  data.validate.input['max-width'] = {
+    label: 'max-width'
+  };
+  data.validate.input['min-height'] = {
+    label: 'min-height'
+  };
+  data.validate.input['max-height'] = {
+    label: 'max-height'
+  };
+
+  res.json(data);
+});
+
+app.get('/validate', function(req, res) {
   var data = { valid: false };
   var imagePath = req.query.image;
   var image;
@@ -43,7 +77,7 @@ app.get('/validate/:prop', function(req, res) {
       var minHeight = parseInt(req.query['min-height'], 10) || 0;
       var maxWidth = parseInt(req.query['max-width'], 10) || Infinity;
       var maxHeight = parseInt(req.query['max-height'], 10) || Infinity;
-console.log(req.query);
+
       data.size = size;
       data.valid = size.width >= minWidth &&
                    size.height >= minHeight &&

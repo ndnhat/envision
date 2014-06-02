@@ -9,9 +9,10 @@
   "author": "Nhat Nguyen <nhat.nguyen@octanner.com>",
   "license": "MIT",
   "dependencies": {
+    "gm": "1.16.0",
+    "newrelic": "^1.7.0",
     "simple-stack-common": "0.2.3",
-    "startup": "~0.3.0",
-    "gm": "1.16.0"
+    "startup": "~0.3.0"
   },
   "devDependencies": {
     "should": "~1.2.2",
