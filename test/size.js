@@ -6,12 +6,13 @@ describe('Validate', function() {
   request = request('http://localhost:5000');
 
   describe('size()', function() {
-    it('should return false when image is not present', function(done) {
+    it('should return an error when image is not present', function(done) {
       request.get('/validate?props=size').end(function(err, res) {
         if (err) {
           throw err;
         }
         res.body.valid.should.be.false;
+        res.body.should.have.property('error');
         done();
       });
     });
@@ -21,7 +22,7 @@ describe('Validate', function() {
         if (err) {
           throw err;
         }
-        res.body.valid.should.be.true;
+        res.body.should.be.valid;
         done();
       });
     });
@@ -31,7 +32,7 @@ describe('Validate', function() {
         if (err) {
           throw err;
         }
-        res.body.valid.should.be.false;
+        res.body.should.be.valid;
         done();
       });
     });
@@ -41,7 +42,7 @@ describe('Validate', function() {
         if (err) {
           throw err;
         }
-        res.body.valid.should.be.false;
+        res.body.should.be.valid;
         done();
       });
     });
@@ -51,7 +52,7 @@ describe('Validate', function() {
         if (err) {
           throw err;
         }
-        res.body.valid.should.be.false;
+        res.body.should.be.valid;
         done();
       });
     });
@@ -61,7 +62,7 @@ describe('Validate', function() {
         if (err) {
           throw err;
         }
-        res.body.valid.should.be.false;
+        res.body.should.be.valid;
         done();
       });
     });
@@ -71,7 +72,7 @@ describe('Validate', function() {
         if (err) {
           throw err;
         }
-        res.body.valid.should.be.true;
+        res.body.should.be.valid;
         done();
       });
     });

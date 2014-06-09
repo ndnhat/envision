@@ -67,6 +67,11 @@ app.get('/validate', function(req, res) {
   var image;
   
   if (!imagePath) {
+    data.error = {
+      status: 400,
+      code: 'missing_image',
+      message: 'The "image" parameter is required'
+    };
     res.json(data);
     return;
   }
