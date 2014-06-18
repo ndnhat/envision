@@ -20,6 +20,9 @@ module.exports = function (app) {
           },
           'max-height': {
             label: 'max-height'
+          },
+          'mimetype': {
+            label: 'mimetype'
           }
         }
       }
