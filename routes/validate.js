@@ -20,12 +20,21 @@ function validateImage(req, res, img) {
     tasks.push(validateType.bind(img, req.query));
   }
 
-  async.parallel(
-    tasks,
-    function(err, results) {
-      res.json(combine(results));
-    }
-  );
+  if (tasks.length) {
+    async.parallel(
+      tasks,
+      function(err, results) {
+        res.json(combine(results));
+      }
+    );
+  } else {
+    res.json(validRes());
+  }
+
+}
+
+function validRes() {
+  return { valid: true };
 }
 
 function getError(code) {
