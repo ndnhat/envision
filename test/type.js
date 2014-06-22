@@ -12,7 +12,6 @@ describe('Validate', function() {
           throw err;
         }
         res.body.valid.should.eql(true);
-        res.body.type.should.eql('jpeg');
         done();
       });
     });
@@ -23,7 +22,7 @@ describe('Validate', function() {
           throw err;
         }
         res.body.valid.should.eql(false);
-        res.body.type.should.eql('jpeg');
+        res.body.invalid.should.have.property('type');
         done();
       });
     });

@@ -46,6 +46,7 @@ describe('Validate', function() {
           throw err;
         }
         res.body.valid.should.eql(false);
+        res.body.invalid.should.have.property('size');
         done();
       });
     });
@@ -56,6 +57,7 @@ describe('Validate', function() {
           throw err;
         }
         res.body.valid.should.eql(false);
+        res.body.invalid.should.have.property('size');
         done();
       });
     });
@@ -66,6 +68,7 @@ describe('Validate', function() {
           throw err;
         }
         res.body.valid.should.eql(false);
+        res.body.invalid.should.have.property('size');
         done();
       });
     });
@@ -76,6 +79,7 @@ describe('Validate', function() {
           throw err;
         }
         res.body.valid.should.eql(false);
+        res.body.invalid.should.have.property('size');
         done();
       });
     });

@@ -12,18 +12,31 @@ describe('Validate', function() {
           throw err;
         }
         res.body.valid.should.eql(true);
-        res.body.type.should.eql('jpeg');
+        res.body.info.should.have.property('size');
+        res.body.info.should.have.property('type');
         done();
       });
     });
 
-    it('should return false for an invalid combo', function(done) {
+    it('should return false for an invalid size and a valid type', function(done) {
       request.get('/validate?image=http%3A%2F%2Florempixel.com%2F40%2F20%2F&mimetype=image/jpeg&max-height=10').end(function(err, res) {
         if (err) {
           throw err;
         }
         res.body.valid.should.eql(false);
-        res.body.type.should.eql('jpeg');
+        res.body.invalid.should.have.property('size');
+        done();
+      });
+    });
+
+    it('should return false for an invalid size and an invalid type', function(done) {
+      request.get('/validate?image=http%3A%2F%2Florempixel.com%2F40%2F20%2F&mimetype=image/png&max-height=10').end(function(err, res) {
+        if (err) {
+          throw err;
+        }
+        res.body.valid.should.eql(false);
+        res.body.invalid.should.have.property('size');
+        res.body.invalid.should.have.property('type');
         done();
       });
     });
