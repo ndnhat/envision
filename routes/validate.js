@@ -1,12 +1,13 @@
 var gm = require('gm');
 var async = require('async');
+var cors = require('cors');
 
 function validate(req, res) {
   try {
     var image = getImage(req.query.image);
     validateImage(req, res, image);
   } catch(e) {
-    res.json({ error: getError(e) });
+    res.json(error(e));
   }
 }
 
@@ -24,25 +25,33 @@ function validateImage(req, res, img) {
     async.parallel(
       tasks,
       function(err, results) {
-        res.json(combine(results));
+        if (err) {
+          res.json(error(500));
+        } else {
+          res.json(combine(results));
+        }
       }
     );
   } else {
-    res.json(validRes());
+    res.json(valid());
   }
 
 }
 
-function validRes() {
+function valid() {
   return { valid: true };
 }
 
-function getError(code) {
-  var error = { statusCode: code };
-  error.message = (code === 400)
+function error(code) {
+  var message = (code === 400)
                 ? 'The "image" parameter is required'
                 : 'Problem loading the specified image';
-  return error;
+  return {
+    error: {
+      statusCode: code,
+      message: message
+    }
+  };
 }
 
 function getImage(path) {
@@ -70,7 +79,7 @@ function validateSize(query, cb) {
         data.invalid = { size: {message: 'Invalid size'} };
       }
     } else {
-      data.error = getError(500);
+      data = error(500);
     }
     cb(null, data);
   });
@@ -86,7 +95,7 @@ function validateType(query, cb) {
         data.invalid = { type: {message: 'Invalid type'} };
       }
     } else {
-      data.error = getError(500);
+      data = error(500);
     }
     cb(null, data);
   });
@@ -111,5 +120,5 @@ function merge(a, b) {
 }
 
 module.exports = function (app) {
-  app.get('/validate', validate);
+  app.get('/validate', cors(), validate);
 };
