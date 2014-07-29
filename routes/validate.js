@@ -1,5 +1,6 @@
 var gm = require('gm');
 var async = require('async');
+var request = require('request');
 var cors = require('cors');
 
 function validate(req, res) {
@@ -58,7 +59,7 @@ function getImage(path) {
   if (!path) {
     throw 400;
   }
-  return gm(path);
+  return gm(request(path), 'tempImage');
 }
 
 function validateSize(query, cb) {
