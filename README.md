@@ -37,7 +37,8 @@ The response body data are formatted as JSON. For example:
       "valid": false,
       "invalid": {
         "size": {
-          "message": "Invalid size"
+          "code": "image-size-too-large",
+          "message": "The size of the image is too large"
         }
       },
     }

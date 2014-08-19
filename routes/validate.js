@@ -76,8 +76,20 @@ function validateSize(query, cb) {
                    size.height >= minHeight &&
                    size.width <= maxWidth &&
                    size.height <= maxHeight;
-      if (!data.valid) {
-        data.invalid = { size: {message: 'Invalid size'} };
+      if (size.width > maxWidth || size.height > maxHeight) {
+        data.invalid = {
+          size: {
+            code: 'image-size-too-large',
+            message: 'The size of the image is too large'
+          }
+        };
+      } else if (size.width < minWidth || size.height < minHeight) {
+        data.invalid = {
+          size: {
+            code: 'image-size-too-small',
+            message: 'The size of the image is too small'
+          }
+        };
       }
     } else {
       data = error(500);
@@ -93,7 +105,12 @@ function validateType(query, cb) {
       data.info = { type: type.toLowerCase() };
       data.valid = query.mimetype.indexOf(data.info.type) >= 0;
       if (!data.valid) {
-        data.invalid = { type: {message: 'Invalid type'} };
+        data.invalid = {
+          type: {
+            code: 'image-type-invalid',
+            message: 'The type of the image is invalid'
+          }
+        };
       }
     } else {
       data = error(500);

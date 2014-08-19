@@ -18,18 +18,6 @@ describe('Validate', function() {
       });
     });
 
-    it('should return an error when image path is invalid', function(done) {
-      request.get('/validate?image=abcd&max-width=10').end(function(err, res) {
-        if (err) {
-          throw err;
-        }
-        res.body.should.not.have.property('valid');
-        res.body.should.have.property('error');
-        res.body.error.should.have.status(500);
-        done();
-      });
-    });
-
     it('should return true when no constraints are present', function(done) {
       request.get('/validate?image=http%3A%2F%2Florempixel.com%2F40%2F20%2F').end(function(err, res) {
         if (err) {
