@@ -87,7 +87,7 @@ function validateSize(query, cb) {
         data.invalid = {
           size: {
             code: 'image-size-too-small',
-            message: 'The size of the image is too small'
+            message: 'The photo is too small to display in print. Please upload a different photo.'
           }
         };
       }
@@ -108,7 +108,7 @@ function validateType(query, cb) {
         data.invalid = {
           type: {
             code: 'image-type-invalid',
-            message: 'The type of the image is invalid'
+            message: 'The photo format cannot be accepted. Please upload a .jpg or .png file.'
           }
         };
       }
