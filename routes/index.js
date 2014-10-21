@@ -25,6 +25,28 @@ module.exports = function (app) {
             label: 'mimetype'
           }
         }
+      },
+      crop: {
+        method: 'GET',
+        action: res.locals.url + '/crop',
+        input: {
+          image: {
+            required: true,
+            label: 'Image'
+          },
+          'width': {
+            label: 'width'
+          },
+          'height': {
+            label: 'height'
+          },
+          'left': {
+            label: 'left'
+          },
+          'top': {
+            label: 'top'
+          }
+        }
       }
     };
 
