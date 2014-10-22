@@ -1,4 +1,3 @@
-var fs = require('fs');
 var gm = require('gm');
 var request = require('request');
 var mime = require('mime');
@@ -8,52 +7,48 @@ var cors = require('cors');
 
 function crop(req, res) {
   try {
-    var image = gm(request(req.query.image), 'tempImage');
     var q = req.query;
+    var filename = getFilename(q.image);
+    var image = gm(request(q.image), filename);
+
     image.crop(q.width, q.height, q.left, q.top).stream(function(err, stdout, stderr) {
       var buf = new Buffer(0);
+
       stdout.on('data', function(d) {
         buf = Buffer.concat([buf, d]);
       });
-      stdout.on('end', function() {
-        var path = 'uploads/' + getFilename(req.query.image);
 
+      stdout.on('end', function() {
+        var prefix = q.prefix || 'uploads/';
+        var path = prefix + filename;
         var data = {
-          Acl: 'public-read',
           Bucket: 'oc-peer-api',
           Key: path,
-          Body: buf
+          ACL: 'public-read',
+          Body: buf,
+          ContentType: mime.lookup(filename)
         };
+
         s3.putObject(data, function(err, s3res) {
           if (!err) {
-            // console.log(res);
             var resp = {
-              image: 'http://oc-peer-api.s3.amazonaws.com/' + path,
+              image: 'https://oc-peer-api.s3.amazonaws.com/' + path,
               alteration: 'cropped'
             };
             res.send(resp);
           } else {
-            console.log(err);
-            res.json(e);
+            res.status(500).send(e);
           }
         });
       });
     });
   } catch(e) {
-    console.log(e);
-    res.json(e);
+    res.status(500).send(e);
   }
 }
 
 function getFilename(url) {
   return url.substring(url.lastIndexOf('/')+1);
-}
-
-function getImage(path) {
-  if (!path) {
-    throw 400;
-  }
-  return gm(request(path), 'tempImage');
 }
 
 module.exports = function (app) {

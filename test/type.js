@@ -3,7 +3,7 @@ var assert = require('assert');
 var should = require('should');
 
 describe('Validate', function() {
-  request = request('http://localhost:5000');
+  request = request(process.env.HOST || 'http://localhost:5000');
 
   describe('image type', function() {
     it('should return true for a valid image/jpeg type', function(done) {
