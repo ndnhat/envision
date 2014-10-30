@@ -45,8 +45,8 @@ function valid() {
 
 function error(code) {
   var message = (code === 400)
-                ? 'The "image" parameter is required'
-                : 'Problem loading the specified image';
+                ? 'The "image" parameter is required.'
+                : 'Problem loading the specified image.';
   return {
     error: {
       statusCode: code,
@@ -76,8 +76,20 @@ function validateSize(query, cb) {
                    size.height >= minHeight &&
                    size.width <= maxWidth &&
                    size.height <= maxHeight;
-      if (!data.valid) {
-        data.invalid = { size: {message: 'Invalid size'} };
+      if (size.width > maxWidth || size.height > maxHeight) {
+        data.invalid = {
+          size: {
+            code: 'image-size-too-large',
+            message: 'The image size is too large.'
+          }
+        };
+      } else if (size.width < minWidth || size.height < minHeight) {
+        data.invalid = {
+          size: {
+            code: 'image-size-too-small',
+            message: 'The image size is too small.'
+          }
+        };
       }
     } else {
       data = error(500);
@@ -93,7 +105,12 @@ function validateType(query, cb) {
       data.info = { type: type.toLowerCase() };
       data.valid = query.mimetype.indexOf(data.info.type) >= 0;
       if (!data.valid) {
-        data.invalid = { type: {message: 'Invalid type'} };
+        data.invalid = {
+          type: {
+            code: 'image-type-invalid',
+            message: 'The image format is invalid.'
+          }
+        };
       }
     } else {
       data = error(500);

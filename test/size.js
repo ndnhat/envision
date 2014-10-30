@@ -3,7 +3,7 @@ var assert = require('assert');
 var should = require('should');
 
 describe('Validate', function() {
-  request = request('http://localhost:5000');
+  request = request(process.env.HOST || 'http://localhost:5000');
 
   describe('params', function() {
     it('should return an error when image is not present', function(done) {
@@ -14,18 +14,6 @@ describe('Validate', function() {
         res.body.should.not.have.property('valid');
         res.body.should.have.property('error');
         res.body.error.should.have.status(400);
-        done();
-      });
-    });
-
-    it('should return an error when image path is invalid', function(done) {
-      request.get('/validate?image=abcd&max-width=10').end(function(err, res) {
-        if (err) {
-          throw err;
-        }
-        res.body.should.not.have.property('valid');
-        res.body.should.have.property('error');
-        res.body.error.should.have.status(500);
         done();
       });
     });
