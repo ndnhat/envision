@@ -1,9 +1,8 @@
 var gm = require('gm');
 var request = require('request');
-var mime = require('mime');
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
 var cors = require('cors');
+var mime = require('mime');
+var upload = require('./s3-upload');
 
 function crop(req, res) {
   try {
@@ -19,27 +18,14 @@ function crop(req, res) {
       });
 
       stdout.on('end', function() {
-        var prefix = q.prefix || 'uploads/';
-        var path = prefix + filename;
-        var data = {
-          Bucket: 'oc-peer-api',
-          Key: path,
-          ACL: 'public-read',
-          Body: buf,
-          ContentType: mime.lookup(filename)
+        var fileObj = {
+          alteration: 'cropped',
+          protocol: req.protocol,
+          prefix: q.prefix,
+          buffer: buf,
+          mimetype: mime.lookup(filename)
         };
-
-        s3.putObject(data, function(err, s3res) {
-          if (!err) {
-            var resp = {
-              image: 'https://oc-peer-api.s3.amazonaws.com/' + path,
-              alteration: 'cropped'
-            };
-            res.send(resp);
-          } else {
-            res.status(500).send(e);
-          }
-        });
+        upload(fileObj, res);
       });
     });
   } catch(e) {
