@@ -50,6 +50,22 @@ module.exports = function (app) {
             label: 'prefix'
           }
         }
+      },
+      rotate: {
+        method: 'GET',
+        action: res.locals.url + '/rotate',
+        input: {
+          image: {
+            required: true,
+            label: 'Image'
+          },
+          'degrees': {
+            label: 'degrees'
+          },
+          'prefix': {
+            label: 'prefix'
+          }
+        }
       }
     };
 

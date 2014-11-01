@@ -30,4 +30,5 @@ app.useBefore('router', function locals(req, res, next) {
 require('./routes/index')(app);
 require('./routes/validate')(app);
 require('./routes/crop')(app);
+require('./routes/rotate')(app);
 
