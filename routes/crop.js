@@ -10,6 +10,10 @@ function crop(req, res) {
     var image = gm(request(q.image)).crop(q.width, q.height, q.left, q.top);
 
     image.toBuffer(function(err, buffer) {
+      if (err) {
+        throw err;
+      }
+
       var fileObj = {
         alteration: 'cropped',
         protocol: req.protocol,

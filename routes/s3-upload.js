@@ -6,7 +6,7 @@ var s3 = new AWS.S3();
 function upload(params, res) {
   var path = (params.prefix || 'altered/') + shortId.generate();
   var data = {
-    Bucket: envs('S3_BUCKET'),
+    Bucket: envs('AWS_BUCKET_NAME'),
     Key: path,
     ACL: 'public-read',
     Body: params.buffer,
@@ -15,14 +15,14 @@ function upload(params, res) {
 
   s3.putObject(data, function(err) {
     if (err) {
-      res.status(500).send(e);
-    } else {
-      var body = {
-        image: params.protocol + '://' + data.Bucket + '.s3.amazonaws.com/' + path,
-        alteration: params.alteration
-      };
-      res.send(body);
+      throw err;
     }
+
+    var body = {
+      image: params.protocol + '://' + data.Bucket + '.s3.amazonaws.com/' + path,
+      alteration: params.alteration
+    };
+    res.send(body);
   });
 }
 

@@ -7,8 +7,11 @@ var upload = require('./s3-upload');
 function rotate(req, res) {
   try {
     var image = gm(request(req.query.image)).rotate('white', req.query.degrees);
-
     image.toBuffer(function(err, buffer) {
+      if (err) {
+        throw err;
+      }
+
       var fileObj = {
         alteration: 'rotated',
         protocol: req.protocol,
