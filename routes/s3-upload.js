@@ -1,10 +1,11 @@
 var shortId = require('shortid');
+var mime = require('mime');
 var envs = require('envs');
 var AWS = require('aws-sdk');
 var s3 = new AWS.S3();
 
 function upload(params, res) {
-  var path = (params.prefix || 'altered/') + shortId.generate();
+  var path = (params.prefix || 'altered/') + shortId.generate() + '.' + mime.extension(params.mimetype);
   var data = {
     Bucket: envs('AWS_BUCKET_NAME'),
     Key: path,
