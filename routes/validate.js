@@ -8,6 +8,8 @@ function validate(req, res) {
     var image = getImage(req.query.image);
     validateImage(req, res, image);
   } catch(e) {
+    console.log("Caught error: " + e);
+    if (e.statusCode && e.statusCode.code && e.statusCode.code === "EAGAIN") console.log(">>> RUNAWAY PROCESS. PLEASE RESTART THIS APP! <<<");
     res.json(error(e));
   }
 }
@@ -43,14 +45,15 @@ function valid() {
   return { valid: true };
 }
 
-function error(code) {
-  var message = (code === 400)
-                ? 'The "image" parameter is required.'
-                : 'Problem loading the specified image.';
+function error(err) {
+  var appStatus = '';
+
+  if (err.code) appStatus = err.code + ' ';
+
   return {
     error: {
-      statusCode: code,
-      message: message
+      statusCode: ((typeof err) === "number") ? err : 500,
+      message: (err === 400) ? 'The "image" parameter is required.' : appStatus + 'Problem loading the specified image.'
     }
   };
 }
