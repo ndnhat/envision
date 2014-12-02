@@ -13,7 +13,7 @@ describe('Validate', function() {
         }
         res.body.should.not.have.property('valid');
         res.body.should.have.property('error');
-        res.body.error.should.have.status(400);
+        res.body.error.should.have.status(500);
         done();
       });
     });

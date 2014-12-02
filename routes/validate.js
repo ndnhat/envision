@@ -8,7 +8,7 @@ function validate(req, res) {
     var image = getImage(req.query.image);
     validateImage(req, res, image);
   } catch(e) {
-    res.json(error(e));
+    error(res, e);
   }
 }
 
@@ -27,7 +27,7 @@ function validateImage(req, res, img) {
       tasks,
       function(err, results) {
         if (err) {
-          res.json(error(500));
+          throw err;
         } else {
           res.json(combine(results));
         }
@@ -43,21 +43,18 @@ function valid() {
   return { valid: true };
 }
 
-function error(code) {
-  var message = (code === 400)
-                ? 'The "image" parameter is required.'
-                : 'Problem loading the specified image.';
-  return {
+function error(res, exception) {
+  res.status(500).json({
     error: {
-      statusCode: code,
-      message: message
+      statusCode: 500,
+      message: exception.message || exception.toString()
     }
-  };
+  });
 }
 
 function getImage(path) {
   if (!path) {
-    throw 400;
+    throw 'The "image" parameter is required.';
   }
   return gm(request(path), 'tempImage');
 }
@@ -92,7 +89,7 @@ function validateSize(query, cb) {
         };
       }
     } else {
-      data = error(500);
+      throw 'Unable to validate image size';
     }
     cb(null, data);
   });
@@ -113,7 +110,7 @@ function validateType(query, cb) {
         };
       }
     } else {
-      data = error(500);
+      throw 'Unable to validate image type';
     }
     cb(null, data);
   });
