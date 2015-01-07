@@ -17,6 +17,7 @@
     "newrelic": "^1.7.0",
     "request": "^2.39.0",
     "shortid": "^2.1.2",
+    "simple-http-proxy": "^0.5.11",
     "simple-stack-common": "0.2.3",
     "startup": "~0.3.0"
   },

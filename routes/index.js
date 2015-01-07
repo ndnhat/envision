@@ -66,6 +66,17 @@ module.exports = function (app) {
             label: 'prefix'
           }
         }
+      },
+      upload: {
+        method: 'POST',
+        action: res.locals.url + '/upload',
+        input: {
+          image: {
+            type: 'file',
+            required: true,
+            label: 'Image'
+          }
+        }
       }
     };
 
