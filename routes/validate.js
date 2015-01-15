@@ -1,32 +1,28 @@
 var gm = require('gm');
 var request = require('request');
+var fileType = require('file-type');
 var cors = require('cors');
 
 function validate(req, res) {
   if (!req.query.image) {
     error('The "image" parameter is required.', res);
   } else {
-    verifyImage(req, res, validateImage);
+    validateImage(req, res);
   }
-}
-
-function verifyImage(req, res, next) {
-  var path = req.query.image;
-  request.head(path, function(err, response, body) {
-    if (err) {
-      error(err, res);
-    } else if (response.headers['content-type'].indexOf('image') < 0) {
-      error('The file provided is not an image', res);
-    } else {
-      next(req, res);
-    }
-  });
-
 }
 
 function validateImage(req, res) {
   var path = req.query.image;
-  var image = gm(request(path), 'tempImage');
+  var stream = request(path);
+  var image = gm(stream, 'tempImage');
+  stream.on('error', function(err) {
+    error(err, res);
+  }).once('data', function(data) {
+    if (fileType(data).mime.indexOf('image') < 0) {
+      error('The file provided is not an image', res);
+    }
+  });
+
   image.identify(function(err, info) {
     if (err) {
       error(err, res);
