@@ -20,6 +20,8 @@ function rotate(req, res) {
         mimetype: mime.lookup(image.source)
       };
 
+      console.log(req.headers);
+
       upload(fileObj, res);
     });
   } catch(e) {
