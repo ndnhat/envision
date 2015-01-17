@@ -1,4 +1,4 @@
-var gm = require('gm');
+  var gm = require('gm');
 var request = require('request');
 var cors = require('cors');
 var mime = require('mime');
@@ -16,7 +16,7 @@ function crop(req, res) {
 
       var fileObj = {
         alteration: 'cropped',
-        protocol: req.protocol,
+        protocol: req.get('x-orig-proto') || req.protocol,
         prefix: q.prefix,
         buffer: buffer,
         mimetype: mime.lookup(image.source)

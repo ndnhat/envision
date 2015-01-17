@@ -14,13 +14,11 @@ function rotate(req, res) {
 
       var fileObj = {
         alteration: 'rotated',
-        protocol: req.protocol,
+        protocol: req.get('x-orig-proto') || req.protocol,
         prefix: req.query.prefix,
         buffer: buffer,
         mimetype: mime.lookup(image.source)
       };
-
-      console.log(req.headers);
 
       upload(fileObj, res);
     });
