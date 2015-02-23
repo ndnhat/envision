@@ -53,6 +53,7 @@ require('./routes/index')(app);
 require('./routes/validate')(app);
 require('./routes/crop')(app);
 require('./routes/rotate')(app);
+require('./routes/square')(app);
 
 app.use('/upload', 'proxy:upload:path', prependPath('/upload'));
 app.use('/upload', 'proxy:upload', proxy(envs('UPLOAD_URL', 'http://oc-peer-api.s3.amazonaws.com'), conf.proxy));

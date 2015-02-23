@@ -77,6 +77,19 @@ module.exports = function (app) {
             label: 'Image'
           }
         }
+      },
+      square: {
+        method: 'GET',
+        action: res.locals.url + '/square',
+        input: {
+            image: {
+                required: true,
+                label: 'Image'
+            },
+            'removePngTransparency': {
+                label: 'removePngTransparency'
+            }
+        }
       }
     };
 
