@@ -16,7 +16,7 @@ function crop(req, res) {
 
       var fileObj = {
         alteration: 'cropped',
-        protocol: req.protocol,
+        protocol: req.get('x-orig-proto') || req.protocol,
         prefix: q.prefix,
         buffer: buffer,
         mimetype: mime.lookup(image.source)
