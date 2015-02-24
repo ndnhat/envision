@@ -8,6 +8,9 @@
   },
   "author": "Nhat Nguyen <nhat.nguyen@octanner.com>",
   "license": "MIT",
+  "engines": {
+    "node": "0.10.x"
+  },
   "dependencies": {
     "aws-sdk": "^2.0.19",
     "cors": "^2.3.1",
