@@ -1,15 +1,13 @@
 var gm = require('gm');
 var request = require('request');
 var cors = require('cors');
-var mime = require('mime');
 var upload = require('./s3-upload');
 
 function crop(req, res) {
   try {
     var q = req.query;
-    var image = gm(request(q.image)).crop(q.width, q.height, q.left, q.top);
-
-    image.toBuffer(function(err, buffer) {
+    var image = gm(request(q.image), 'tempImage');
+    image.crop(q.width, q.height, q.left, q.top).toBuffer(function(err, buffer) {
       if (err) {
         throw err;
       }
@@ -18,8 +16,7 @@ function crop(req, res) {
         alteration: 'cropped',
         protocol: req.get('x-orig-proto') || req.protocol,
         prefix: q.prefix,
-        buffer: buffer,
-        mimetype: mime.lookup(image.source)
+        buffer: buffer
       };
 
       upload(fileObj, res);
