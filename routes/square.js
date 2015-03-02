@@ -2,12 +2,19 @@ var gm = require('gm');
 var request = require('request');
 var cors = require('cors');
 var upload = require('./s3-upload');
+var fileType = require('file-type');
 
 function square(req, res) {
   try {
     var q = req.query;
     var squared = false;
-    var image = gm(request(q.image));
+    var mime;
+    var stream = request(q.image);
+    var image = gm(stream);
+
+    stream.once('data', function(data) {
+      mime = fileType(data).mime;
+    });
 
     image.size(function (err, info) {
       if (err) {
@@ -26,7 +33,7 @@ function square(req, res) {
           croppedImage = gm(request(q.image));
         }
 
-        if (q.removePngTransparency) {
+        if (q.removePngTransparency && mime.indexOf('png') >= 0) {
           croppedImage
             .out("-operator", "Opacity", "Assign", "100%")
             .out("-background", "#ffffff")
