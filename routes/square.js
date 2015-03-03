@@ -57,25 +57,19 @@ function square(req, res) {
                 upload(fileObj, res);
               }
             });
-        } else if (squared) {
+        } else {
           croppedImage.toBuffer(function (err, buffer) {
             if (err) {
               res.status(500).send(e);
             }
             var fileObj = {
-              alteration: 'squared',
+              alteration: squared ? 'squared' : 'none',
               protocol: req.protocol,
               prefix: q.prefix,
               buffer: buffer
             };
             upload(fileObj, res);
           });
-        } else {
-          var body = {
-            image: q.image,
-            alteration: 'none'
-          };
-          res.send(body);
         }
       }
     });

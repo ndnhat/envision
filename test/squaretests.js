@@ -3,13 +3,13 @@ var should = require('should');
 
 describe('Square', function() {
   describe('an image', function() {
-    it('should not crop the image but return the same url if already square', function(done) {
+    it('should not crop the image and return a new url if already square', function(done) {
         request.get('/square?image=http://placehold.it/10x10.gif').end(function(err, res) {
             if (err) {
                 throw err;
             }
             res.body.should.have.property('image');
-            res.body.image.should.eql('http://placehold.it/10x10.gif')
+            res.body.image.should.not.eql('http://placehold.it/10x10.gif')
             res.body.should.have.property('alteration');
             res.body.alteration.should.eql('none');
 
