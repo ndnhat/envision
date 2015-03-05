@@ -50,7 +50,7 @@ function square(req, res) {
 
                 var fileObj = {
                   alteration: alterationDesc,
-                  protocol: req.protocol,
+                  protocol: req.get('x-orig-proto') || req.protocol,
                   prefix: q.prefix,
                   buffer: buffer
                 };
@@ -64,7 +64,7 @@ function square(req, res) {
             }
             var fileObj = {
               alteration: squared ? 'squared' : 'none',
-              protocol: req.protocol,
+              protocol: req.get('x-orig-proto') || req.protocol,
               prefix: q.prefix,
               buffer: buffer
             };
