@@ -15,24 +15,26 @@ function validateImage(req, res) {
   var path = req.query.image;
   var stream = request(path);
   var image = gm(stream, 'tempImage');
+  var mime;
   stream.on('error', function(err) {
     error(err, res);
   }).once('data', function(data) {
-    if (fileType(data).mime.indexOf('image') < 0) {
+    mime = fileType(data).mime;
+    if (mime.indexOf('image') < 0) {
       error('The file provided is not an image', res);
     }
   });
 
-  image.identify(function(err, info) {
+  image.size(function(err, size) {
     if (err) {
       error(err, res);
     } else {
       var validations = [];
       if (req.query['min-width'] || req.query['min-height'] || req.query['max-width'] || req.query['max-height']) {
-        validations.push(validateSize(info.size, req.query));
+        validations.push(validateSize(size, req.query));
       }
       if (req.query['mimetype']) {
-        validations.push(validateType(info.format, req.query));
+        validations.push(validateType(mime, req.query));
       }
 
       res.json(combine(validations));
